@@ -4,7 +4,7 @@ Style Guides
 ## Python
 
 - Generally follow standard PEP8 rules--even in tests!
-- Ruff will be utilized for linting.
+ - Ruff is used for linting and formatting.
 - Use Google style docstrings.
 
 ### Conventions and examples
@@ -79,6 +79,13 @@ def normalize_email(email: str) -> str:
     return email.strip().lower()
 ```
 
+### Docstrings coverage
+
+- Modules: Add a brief module-level docstring stating purpose and key concepts.
+- Classes: Include a short summary and an Attributes section for key fields.
+- Properties: Docstring the getter if computed or has side effects.
+- Cross-link rationale: see Patterns and Architecture "Why/How/Example/Pitfalls" for organization guidance (guides/patterns_and_architecture.md).
+
 ### Ruff configuration (example)
 
 ```toml
@@ -101,6 +108,26 @@ ignore = [
 convention = "google"
 ```
 
+### Pytest conventions
+
+- Structure: `tests/` with `unit/` and `integration/` subfolders when useful.
+- Naming: files `test_*.py`; functions `test_<unit>_<behavior>`; fixtures in `conftest.py`.
+- Fixtures: prefer factory-style fixtures; scope narrowly; avoid `autouse` except for env setup.
+- Marks: use `@pytest.mark.slow`, `@pytest.mark.integration`, etc.; register in config.
+- Assertions: use bare `assert`; prefer `pytest.raises` for exception checks.
+- Minimal pyproject config example:
+
+```toml
+# pyproject.toml
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+markers = [
+  "slow: long-running tests",
+  "integration: crosses process or network boundaries",
+]
+```
+
 
 ## Javascript and Typescript
 
@@ -108,6 +135,13 @@ The ff. utilities and the standards they check against are observed:
 
 - https://github.com/standard/standard
 - https://github.com/standard/ts-standard
+
+### Module boundaries and imports
+
+- Prefer absolute imports from the project root using path aliases; avoid deep relative paths.
+- Order imports: standard library/built-ins, third-party, internal (domain-first), then relatives.
+- Group with blank lines between groups; prefer named exports over default.
+- Use barrels (`index.ts`) sparingly; avoid cross-barrel cycles and re-exporting deep internals.
 
 ### JavaScript (standard) example
 
@@ -142,12 +176,62 @@ export async function fetchUser (id: string): Promise<User | null> {
 }
 ```
 
+### Async and error handling
+
+- Wrap `fetch` with a small helper to set base URL, timeouts, and JSON handling.
+- Catch errors at boundaries (UI handlers, API adapters); keep inner logic mostly error-agnostic.
+- Prefer discriminated unions or `Result`-style types for recoverable errors.
+
+```ts
+// Minimal fetch wrapper with timeout and JSON
+export async function http<T>(input: RequestInfo, init: RequestInit = {}): Promise<T> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 10_000)
+  try {
+    const res = await fetch(input, { ...init, signal: controller.signal, headers: {
+      'content-type': 'application/json',
+      ...(init.headers ?? {})
+    }})
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`)
+    }
+    return await res.json() as T
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+```
+
+### Minimal tsconfig example
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "lib": ["ES2020", "DOM"],
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["src/*"]
+    }
+  },
+  "include": ["src"]
+}
+```
+
 ### Common pitfalls
 
 - Avoid implicit any in TS; type all public surfaces.
 - Prefer named exports; avoid default unless a module has a single export.
 
-## Identation
+## Indentation
 
 - Python will be indented using 4 spaces
 - scripts (JS/TS/SH), data formats (JSON/YAML), markup languages (MD/HTML/CSS), configs, etc
@@ -215,6 +299,7 @@ fi
   - layout what the reader will expect if they read further
   - unpack the information clearly and succinctly
   - know when to break these rules depending on context
+  - see examples in Patterns and Architecture and Workflow guides (guides/patterns_and_architecture.md, guides/workflow.md)
 
 ### Semantic line breaks
 
@@ -268,4 +353,31 @@ Jobs must be idempotent.
 Prefer at-least-once delivery with deduplication keys.
 Record metrics for enqueue time, run time, and failures.
 ...
+```
+
+## Cross-language conventions
+
+- Maximum line length: 100 characters (code and prose), unless readability suffers.
+- Trailing commas: prefer in multi-line constructs to minimize diff noise (where language allows).
+- Files should end with a newline; avoid trailing whitespace.
+
+### EditorConfig (example)
+
+```ini
+# .editorconfig
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+[*.py]
+indent_size = 4
+
+[Makefile]
+indent_style = tab
 ```

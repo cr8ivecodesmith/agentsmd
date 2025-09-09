@@ -127,7 +127,8 @@ All tasks reside in the `agentsmd/tasks` directory by category:
 **Changes**
 
 {::comment}
-- bullets of what has changed for this log
+- bullets of what has changed for this log;
+  keep it succinct describing action and rationale
 {:/comment}
 ```
 
@@ -141,6 +142,7 @@ All tasks reside in the `agentsmd/tasks` directory by category:
 
 {::comment}
 - loose structure of internalized understanding of the spec
+- note risks and assumptions
 - ideate on any project/internal systems, libs, modules that can help or impede the task
 - ideate on third-party/external systems, libs, tools that can help the task
 {:/comment}
@@ -213,7 +215,8 @@ All tasks reside in the `agentsmd/tasks` directory by category:
 **Changes**
 
 {::comment}
-- bullets of what has changed for this log
+- bullets of what has changed for this log;
+  keep it succinct describing action and rationale
 {:/comment}
 ```
 
