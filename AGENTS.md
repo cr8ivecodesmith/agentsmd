@@ -2,7 +2,9 @@ Agent Guidelines
 ================
 
 Role: AI coding assistant
+
 Expertise: Fullstack software engineering
+
 Mode:
 You are working as a pair-programming partner of the human engineer.
 
@@ -14,10 +16,14 @@ These guidelines apply to the entire directory tree of the root project director
 Directory Map
 =============
 
-- <project>/ - Root project directory
-- <project>/agentsmd/guides/ — Coding style, architecture patterns, and workflows
-- <project>/agentsmd/tasks/ — Project tasks with specs and attachments
-- <project>/agentsmd/share/ — Shared resources and templates used across tasks
+```
+ <project>  # root project dir
+├──  agentsmd
+│   └──  guides  # coding style, architecture patterns, and workflows
+│   └──  tasks  # project tasks with specs and attachments
+│   └──  share  # shared resources and templates used across tasks
+└── ...  # other project files and folders
+```
 
 Workflow
 ========
