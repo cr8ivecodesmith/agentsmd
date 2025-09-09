@@ -7,41 +7,40 @@ This document describes how the agent will work with the human.
 
 The human will direct you on what task or spec you will be working on together.
 
-A typical task development cycle will comprise of the ff. steps:
+A typical task development cycle comprises the following steps:
 
 1. Understand the task
 2. Gather resources
 3. Plan the solution
 4. Plan test items
 5. Execute plan
-6. Log history
+6. Update history
 
 **Important:**
 
 - The human may ask you to create or improve a task spec first.
-- Some steps will require a few rounds of back-and-forth discussion before proceeding
-- Hence, you will confirm explicit permission from the human before moving onto the next step.
+- Some steps may require a few rounds of back-and-forth discussion before proceeding.
+- Confirm explicit permission from the human before moving on to the next step.
 - The human may ask you to skip steps in the implementation plan.
 - For large tasks, the human will want to work on one milestone at a time.
 
 
 ### 1. Understand the task
 
-You will ideate and articulate how you understand the spec.
-Here you can also list down logical milestones for working on larger tasks.
-This is important for identifying constraints and opportunities.
-The human may correct or enhance what you've written here as clarification
-or additional context.
+Ideate and articulate how you understand the spec.
+List logical milestones for larger tasks to surface sequencing and scope.
+This helps identify constraints and opportunities early.
+The human may correct or enhance what you write as clarification or additional context.
 
 
 ### 2. Gather resources
 
-Building upon a good understanding of the spec,
-its now time to gather relevant resources we will use to plan the solution.
-This is important for focus and context management.
-Like a chef preparing every ingredient and tools before cooking.
+Building on a good understanding of the spec,
+it is now time to gather the resources we will use to plan the solution.
+This step improves focus and context management —
+like a chef preparing every ingredient and tool before cooking.
 
-This will typically go through the ff. substeps:
+This typically goes through the following substeps:
 
 1. Collect project and external docs
 2. Identify affected systems
@@ -51,30 +50,29 @@ This will typically go through the ff. substeps:
 
 ### 3. Plan the solution
 
-Now we have everything on the table.
-We can start thinking about how to create and put things together.
+With everything on the table,
+start thinking about how to create and put things together.
 Design patterns and architecture principles come into play here.
 
 
 ### 4. Plan test items
 
 With the plan of attack set,
-we can think about how we can verify the outcomes of our solution.
+decide how to verify the outcomes of the solution.
 Testing patterns come into play here.
 
 
 ### 5. Execute plan
 
-By this time we have a solid plan of attack.
-The human will ask you to execute on the solution and test plans.
-This may take several iterations
-and may require updating the plan and test items.
+At this point there is a solid plan of attack.
+Execute the solution and test plans as requested by the human.
+Expect several iterations and updates to both plan and tests as you progress.
 
 
 ### 6. Update history
 
-Were done with this task or a milestone.
-The human will ask you to write up a changelog prior to committing.
+We’re done with this task or a milestone.
+The human will ask you to write a changelog prior to committing.
 
 
 ## Resources
@@ -122,7 +120,7 @@ All tasks reside in the `agentsmd/tasks` directory by category:
 **Summary**
 
 {::comment}
-- one-liner summary of changes; useable for a git commit
+- one-liner summary of changes; usable for a git commit
 - most recent update goes first
 {:/comment}
 
@@ -208,7 +206,7 @@ All tasks reside in the `agentsmd/tasks` directory by category:
 **Summary**
 
 {::comment}
-- one-liner summary of changes; useable for a git commit
+- one-liner summary of changes; usable for a git commit
 - most recent update goes first
 {:/comment}
 
@@ -221,6 +219,7 @@ All tasks reside in the `agentsmd/tasks` directory by category:
 
 ## Exceptions and nuances
 
-Depending on the task some or all of these steps may be unnecessary,
-this where the understanding step comes in;
-make judgement calls and note suggestions for handling nuances in the future
+Depending on the task,
+some or all of these steps may be unnecessary —
+this is where the understanding step comes in.
+Make judgment calls and note suggestions for handling nuances in the future.
