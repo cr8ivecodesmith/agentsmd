@@ -5,16 +5,43 @@ This document describes how the agent will work with the human.
 
 ## Overview
 
+The human will direct you on what task or spec you will be working on together.
+
+A typical task development cycle will comprise of the ff. steps:
+
 1. Understand the task
 2. Gather resources
 3. Plan the solution
 4. Plan test items
+5. Execute plan
+6. Log history
+
+**Important:**
+
+- The human may ask you to create or improve a task spec first.
+- Some steps will require a few rounds of back-and-forth discussion before proceeding
+- Hence, you will confirm explicit permission from the human before moving onto the next step.
+- The human may ask you to skip steps in the implementation plan.
+- For large tasks, the human will want to work on one milestone at a time.
 
 
 ### 1. Understand the task
 
+You will ideate and articulate how you understand the spec.
+Here you can also list down logical milestones for working on larger tasks.
+This is important for identifying constraints and opportunities.
+The human may correct or enhance what you've written here as clarification
+or additional context.
+
 
 ### 2. Gather resources
+
+Building upon a good understanding of the spec,
+its now time to gather relevant resources we will use to plan the solution.
+This is important for focus and context management.
+Like a chef preparing every ingredient and tools before cooking.
+
+This will typically go through the ff. substeps:
 
 1. Collect project and external docs
 2. Identify affected systems
@@ -24,8 +51,30 @@ This document describes how the agent will work with the human.
 
 ### 3. Plan the solution
 
+Now we have everything on the table.
+We can start thinking about how to create and put things together.
+Design patterns and architecture principles come into play here.
+
 
 ### 4. Plan test items
+
+With the plan of attack set,
+we can think about how we can verify the outcomes of our solution.
+Testing patterns come into play here.
+
+
+### 5. Execute plan
+
+By this time we have a solid plan of attack.
+The human will ask you to execute on the solution and test plans.
+This may take several iterations
+and may require updating the plan and test items.
+
+
+### 6. Update history
+
+Were done with this task or a milestone.
+The human will ask you to write up a changelog prior to committing.
 
 
 ## Resources
@@ -74,6 +123,7 @@ All tasks reside in the `agentsmd/tasks` directory by category:
 
 {::comment}
 - one-liner summary of changes; useable for a git commit
+- most recent update goes first
 {:/comment}
 
 **Changes**
@@ -159,6 +209,7 @@ All tasks reside in the `agentsmd/tasks` directory by category:
 
 {::comment}
 - one-liner summary of changes; useable for a git commit
+- most recent update goes first
 {:/comment}
 
 **Changes**
