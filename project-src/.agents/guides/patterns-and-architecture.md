@@ -1,7 +1,9 @@
-Patterns and Architecture
-===
+# Patterns and Architecture
 
 ## Principles
+
+These defaults aim to travel well across languages and stacks.
+Code samples use Python for brevity—treat them as illustrations you can translate to your tooling.
 
 - Reduce cognitive load with organization
 - Prefer composition over inheritance
@@ -22,7 +24,7 @@ Patterns and Architecture
 - Name things by responsibility and outcome, not by implementation detail.
 - Keep entrypoints thin; push detail into helpers.
 
-#### Python example
+#### Example (Python)
 ```python
 def process_order(order):
     """Thin orchestration reads like a checklist."""
@@ -58,7 +60,7 @@ def summarize(result):
 - Composition keeps types small, testable, and flexible to change.
 - Inheritance couples you to a parent’s lifecycle and surface area.
 
-#### Python example (composition)
+#### Example (Python; composition)
 ```python
 class Logger:
     def info(self, msg: str) -> None:
@@ -97,7 +99,7 @@ class CheckoutLogger(PaymentGateway):
 - A stable interface with multiple stateful implementations benefits from inheritance or ABCs.
 - Good fit for domain variants that share a contract.
 
-#### Python example (ABC-based stateful variants)
+#### Example (Python; ABC-based stateful variants)
 ```python
 from abc import ABC, abstractmethod
 
@@ -121,14 +123,15 @@ def checkout(total: float, rule: PriceRule) -> float:
 
 #### Notes
 - Prefer ABCs/protocols for contracts; avoid deep hierarchies.
-- Consider `collections.UserDict`/`UserList` when extending container behavior.
+- In Python, `collections.UserDict`/`UserList` help extend container behavior;
+  use your language’s standard library equivalents elsewhere.
 
 ### Functions should be stateless and idempotent
 
 #### Why
 - Stateless, idempotent functions are easy to test, compose, and cache.
 
-#### Python example
+#### Example (Python)
 ```python
 def normalize_email(email: str) -> str:
     """Pure: same input => same output; no side effects."""
@@ -151,7 +154,7 @@ e2 = upsert_keys(e1, ["b"])               # still {"a","b"}
 #### Why
 - Encapsulate invariants and lifecycle around changing state.
 
-#### Python example
+#### Example (Python)
 ```python
 class RateLimiter:
     def __init__(self, limit: int) -> None:
@@ -169,14 +172,15 @@ class RateLimiter:
 ```
 
 #### Notes
-- Use `@dataclass` for simple data holders; add methods when rules emerge.
+- Leverage your language’s lightweight data-structure helpers (e.g., Python `@dataclass`)
+  for simple data holders; add methods when rules emerge.
 
 ### Classes can namespace stateless functions
 
 #### Why
 - Group related pure operations with shared configuration or naming.
 
-#### Python example
+#### Example (Python)
 ```python
 import hashlib
 
@@ -203,7 +207,7 @@ class Password:
 #### How
 - Use guard clauses, extract helpers, or dispatch tables/polymorphism.
 
-#### Python example (refactor deep nesting)
+#### Example (Python; refactor deep nesting)
 ```python
 # Before
 def handle(event):
@@ -255,12 +259,12 @@ def handle(event):
 - Name tests as behavior: `test_<when>_<does>_<expectation>`.
 - One assertion per behavior; group related assertions logically.
 - Prefer dependency injection + fakes over deep mocking trees.
-- Use `pytest.mark.parametrize` to cover edge cases concisely.
+- Use parameterized test helpers (e.g., `pytest.mark.parametrize`, JUnit params) to cover edge cases concisely.
 - Freeze time and randomness (e.g., seed `random`, inject clock/token generators).
 - Avoid shared mutable state; prefer fresh fixtures; clean up with context managers.
 - Measure coverage but don’t chase 100%; prioritize risk and complexity.
 
-### Pytest examples
+### Example (Python; pytest)
 ```python
 # tests/test_checkout.py
 import pytest
@@ -287,8 +291,10 @@ def test_checkout_integration(tmp_path):
     co = Checkout(gateway=gw)
     assert co.pay(42.0) is True
 ```
+### Fakes, not mocks (example)
 
-### Fakes, not mocks
+_Python illustration; employ hand-rolled fakes in your framework to capture behavior without brittle mocks._
+
 ```python
 class FakeGateway:
     def __init__(self):
@@ -304,7 +310,7 @@ def test_checkout_records_charge():
 ```
 
 ### Property-based spot checks
-- Use `hypothesis` where beneficial for invariants (if available).
+- Use property-based testing tools (Hypothesis, QuickCheck, jqwik, etc.) where they reinforce invariants.
 - Examples: parsing/serialization round-trips, commutativity, idempotency.
 
 
@@ -326,7 +332,7 @@ def test_checkout_records_charge():
 - Rotate credentials; support multiple keys if feasible.
 - Compare secrets with `hmac.compare_digest` to avoid timing attacks.
 
-### Python examples
+### Example (Python)
 ```python
 # SQL: parameterized, never string formatting
 cur.execute("INSERT INTO users(name) VALUES (?)", (name,))
@@ -414,9 +420,12 @@ def chunked(iterable, size):
 
 ### Logging
 - Structure logs (JSON or key-value) and include stable fields: `event`, `component`, `request_id`.
-- Use levels intentionally: `DEBUG` (dev detail), `INFO` (state changes), `WARNING` (recoverable oddities), `ERROR` (failed operation), `CRITICAL` (system unusable).
+- Use levels intentionally: `DEBUG` (dev detail), `INFO` (state changes),
+  `WARNING` (recoverable oddities), `ERROR` (failed operation), `CRITICAL` (system unusable).
 - Log once at the boundary; avoid duplicate logs for the same failure.
 - Redact secrets before logging; centralize redaction helpers.
+
+_Python illustration; configure logging analogously in your stack._
 
 ```python
 import logging
@@ -436,6 +445,8 @@ def pay(amount: float, *, request_id: str):
 - Avoid returning `None`/sentinels for exceptional states; raise with message and data.
 - Use retries with backoff for transient errors; cap attempts and total time.
 
+_Python illustration; translate exception handling patterns to your language._
+
 ```python
 class PaymentError(Exception):
     pass
@@ -454,7 +465,7 @@ def charge(gw, amount: float):
 - Keep public APIs small; hide internals behind modules or `_` prefixes.
 - Prefer absolute imports for clarity; avoid deep relative chains.
 
-### Example layout (feature-oriented)
+### Example layout (Python package; feature-oriented)
 ```
 src/app/
   __init__.py
@@ -478,9 +489,16 @@ tests/
 ```
 
 ### Conventions
-- `__init__.py` exposes the minimal public surface via `__all__` if needed.
+- In Python packages, let `__init__.py` expose a minimal public surface via `__all__` if needed;
+  mirror that minimalism in other module systems.
 - Avoid giant `utils.py`; instead create `lib/<area>.py` or feature-local helpers.
 - Keep entrypoints (`cli.py`, `main.py`) thin; configure and call feature services.
+
+
+## Project-specific guidance
+
+_Capture repository or team-specific architectural rules here (framework integrations,
+layering constraints, approved libraries, etc.)._
 
 
 ## Anti-patterns and Micro-patterns
@@ -502,9 +520,11 @@ tests/
 - Adapter: wrap third-party APIs to present a stable, testable interface.
 - Null object: provide do-nothing implementation to avoid `if x is None`.
 - Context manager: ensure resources are released (`with` for files, locks, sessions).
-- Dataclass for value objects; validate in `__post_init__`.
+- Use lightweight value-object helpers (e.g., data classes) and validate immediately after initialization.
 - Sentinel object for “not provided” distinct from `None`.
-- Use `pathlib.Path`, `datetime` with timezone awareness, and `Enum` for choices.
+- Prefer standard library facilities for paths, timezones, and enums (e.g., Python `pathlib.Path`, `datetime`, `Enum`).
+
+_Python illustration; adapt idioms to your language._
 
 ```python
 # Mutable default safe pattern
